@@ -34,4 +34,5 @@ workflows:
             CODE_SIGNING_REQUIRED=NO
 
     artifacts:
-      - ios/build/**/*.app
+       - build/ios/ipa/*.ipa
+       - /tmp/xcodebuild_logs/*.log
