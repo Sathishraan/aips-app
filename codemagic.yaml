@@ -25,10 +25,15 @@ workflows:
 
       - name: Build iOS IPA
         script: |
+          WORKSPACE=$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+          SCHEME=$(basename "$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcodeproj" | head -n 1)" .xcodeproj)
+
+          echo "Workspace: $WORKSPACE"
+          echo "Scheme: $SCHEME"
+
           xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/ios/Runner.xcworkspace" \
-            --scheme "Runner" \
-            --export-options-plist /tmp/export_options.plist
+            --workspace "$WORKSPACE" \
+            --scheme "$SCHEME"
 
     artifacts:
       - build/ios/ipa/*.ipa
