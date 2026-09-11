@@ -9,10 +9,6 @@ workflows:
       xcode: latest
       cocoapods: default
 
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.sparkleschool.app
-
     scripts:
       - name: Install dependencies
         script: |
@@ -27,15 +23,12 @@ workflows:
           cd ios
           pod install
 
-      - name: Set up code signing
-        script: |
-          xcode-project use-profiles
-
       - name: Build iOS IPA
         script: |
           xcode-project build-ipa \
             --workspace "$CM_BUILD_DIR/ios/Runner.xcworkspace" \
-            --scheme "Runner"
+            --scheme "Runner" \
+            --export-options-plist /tmp/export_options.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
