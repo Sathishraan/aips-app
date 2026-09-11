@@ -1,29 +1,30 @@
+
 workflows:
-  ios-release:
-    name: Sparkle iOS Release
+  ios-unsigned-build:
+    name: Sparkle iOS Unsigned Build
+
+    max_build_duration: 60
+
     instance_type: mac_mini_m2
 
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.sparkledigitalsolutions.app
+      node: 22.13.1
 
       vars:
         EXPO_PUBLIC_API_BASE_URL: "https://tigerservers.in/aips/"
         EXPO_PUBLIC_NODE_URL: "https://tigerservers.in/node_server/"
 
-      node: 22.13.1
-
     scripts:
+
       - name: Install dependencies
         script: |
           npm ci
 
-      - name: Expo doctor
+      - name: Check Expo project
         script: |
           npx expo-doctor
 
-      - name: Prebuild iOS
+      - name: Generate iOS project
         script: |
           npx expo prebuild --platform ios --clean
 
@@ -32,33 +33,29 @@ workflows:
           cd ios
           pod install
 
-      - name: Build iOS IPA
+      - name: Build unsigned iOS archive
         script: |
           set -e
 
-          WORKSPACE=$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+          cd ios
 
-          if [ -z "$WORKSPACE" ]; then
-            echo "ERROR: iOS workspace not found"
-            exit 1
-          fi
+          WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+
+          SCHEME=$(basename "$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)" .xcodeproj)
 
           echo "Workspace: $WORKSPACE"
-
-          SCHEME=$(basename "$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcodeproj" | head -n 1)" .xcodeproj)
-
-          if [ -z "$SCHEME" ]; then
-            echo "ERROR: iOS scheme not found"
-            exit 1
-          fi
-
           echo "Scheme: $SCHEME"
 
-          xcode-project build-ipa \
-            --workspace "$WORKSPACE" \
-            --scheme "$SCHEME"
+          xcodebuild \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "$CM_BUILD_DIR/build/Sparkle.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            archive
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/**/*.xcarchive
       - /tmp/xcodebuild_logs/*.log
-      - /tmp/build_logs/*.log
