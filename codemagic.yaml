@@ -1,34 +1,57 @@
 workflows:
-  ios-build:
-    name: iOS Build
-    max_build_duration: 120
+  ios-release:
+    name: Sparkle iOS Release
     instance_type: mac_mini_m2
 
     environment:
-      node: 22
-      xcode: latest
-      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.sparkledigitalsolutions.app
+
+      vars:
+        EXPO_PUBLIC_API_BASE_URL: "https://tigerservers.in/aips/"
+        EXPO_PUBLIC_NODE_URL: "https://tigerservers.in/node_server/"
+
+      node: 22.13.1
 
     scripts:
       - name: Install dependencies
         script: |
-          npm install
+          npm ci
 
-      - name: Generate iOS project
+      - name: Expo doctor
         script: |
-          npx expo prebuild --platform ios
+          npx expo-doctor
 
-      - name: Install CocoaPods dependencies
+      - name: Prebuild iOS
+        script: |
+          npx expo prebuild --platform ios --clean
+
+      - name: Install CocoaPods
         script: |
           cd ios
           pod install
 
       - name: Build iOS IPA
         script: |
+          set -e
+
           WORKSPACE=$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcworkspace" | head -n 1)
-          SCHEME=$(basename "$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcodeproj" | head -n 1)" .xcodeproj)
+
+          if [ -z "$WORKSPACE" ]; then
+            echo "ERROR: iOS workspace not found"
+            exit 1
+          fi
 
           echo "Workspace: $WORKSPACE"
+
+          SCHEME=$(basename "$(find "$CM_BUILD_DIR/ios" -maxdepth 1 -name "*.xcodeproj" | head -n 1)" .xcodeproj)
+
+          if [ -z "$SCHEME" ]; then
+            echo "ERROR: iOS scheme not found"
+            exit 1
+          fi
+
           echo "Scheme: $SCHEME"
 
           xcode-project build-ipa \
@@ -38,3 +61,4 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+      - /tmp/build_logs/*.log
