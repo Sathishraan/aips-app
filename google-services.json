@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "462639628093",
+    "project_id": "sparkle-app-a1822",
+    "storage_bucket": "sparkle-app-a1822.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462639628093:android:e604593b22172a6f458f54",
+        "android_client_info": {
+          "package_name": "com.sparkledigitalsolutions.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPnE-N7zddictC6RKijch8XMfNp0ZDPcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

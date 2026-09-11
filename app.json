@@ -1,0 +1,78 @@
+{
+  "expo": {
+    "name": "AIPS App",
+    "slug": "aips-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/app-icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow access to photo library to send images and videos.",
+        "NSCameraUsageDescription": "Allow access to camera to take photos and videos.",
+        "NSMicrophoneUsageDescription": "Allow access to microphone for voice notes.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.sparkledigitalsolutions.app"
+    },
+    "android": {
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO"
+      ],
+      "softwareKeyboardLayoutMode": "resize",
+      "usesCleartextTraffic": true,
+      "predictiveBackGestureEnabled": false,
+      "googleServicesFile": "./google-services.json",
+      "package": "com.sparkledigitalsolutions.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "versionCode": 6
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/aips-logo.png",
+          "backgroundColor": "#ffffff",
+          "resizeMode": "contain",
+          "imageWidth": 200
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with the school."
+        }
+      ],
+      "expo-secure-store",
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      [
+        "expo-notifications",
+        {
+          "color": "#5a6898"
+        }
+      ],
+      "expo-sharing"
+    ],
+    "web": {
+      "favicon": "./assets/aips-logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9e8fbfbd-6259-4044-88f8-9b02d4d3d2d5"
+      }
+    }
+  }
+}

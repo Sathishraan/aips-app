@@ -1,0 +1,582 @@
+{
+    "info": {
+        "name": "AIPS Student API",
+        "description": "Aadhithya International Public Schools - Student Data API Collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Student Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "",
+                                    "if (jsonData.status === \"success\" && jsonData.data.token) {",
+                                    "    pm.environment.set(\"token\", jsonData.data.token);",
+                                    "    console.log(\"Token saved:\", jsonData.data.token);",
+                                    "    ",
+                                    "    if (jsonData.data.user && jsonData.data.user.stud_id) {",
+                                    "        pm.environment.set(\"student_id\", jsonData.data.user.stud_id);",
+                                    "        console.log(\"Student ID saved:\", jsonData.data.user.stud_id);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "username",
+                                    "value": "student123",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "password123",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "academic_year",
+                                    "value": "2024-2025",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "device_type",
+                                    "value": "1",
+                                    "type": "text",
+                                    "description": "1 for Android, 2 for iOS"
+                                },
+                                {
+                                    "key": "firebase_token",
+                                    "value": "",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "device",
+                                    "value": "",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}api/login",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Profile",
+            "item": [
+                {
+                    "name": "Get Student Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/user/details?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "user",
+                                "details"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Profile Photo",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "profile_image",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}api/profile/update/photo?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "profile",
+                                "update",
+                                "photo"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Homework",
+            "item": [
+                {
+                    "name": "Get Homework List",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/homework/list?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "homework",
+                                "list"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Homework Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/homework/1?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "homework",
+                                "1"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Fees",
+            "item": [
+                {
+                    "name": "Get Fee Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/fees?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "fees"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Attendance",
+            "item": [
+                {
+                    "name": "Get Attendance Records",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/attendance?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "attendance"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Attendance by Month",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/attendance/month?month=2&year=2026&token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "attendance",
+                                "month"
+                            ],
+                            "query": [
+                                {
+                                    "key": "month",
+                                    "value": "2"
+                                },
+                                {
+                                    "key": "year",
+                                    "value": "2026"
+                                },
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Timetable",
+            "item": [
+                {
+                    "name": "Get Timetable",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/timetable?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "timetable"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Exam Results",
+            "item": [
+                {
+                    "name": "Get Exam Results",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/results?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "results"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Student Notifications",
+            "item": [
+                {
+                    "name": "Get Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "auth",
+                                "value": "{{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}api/student/notifications?token={{token}}&auth={{token}}",
+                            "host": [
+                                "{{base_url}}api"
+                            ],
+                            "path": [
+                                "student",
+                                "notifications"
+                            ],
+                            "query": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}"
+                                },
+                                {
+                                    "key": "auth",
+                                    "value": "{{token}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "https://tigerservers.in/aips/",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "student_id",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}
